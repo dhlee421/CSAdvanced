@@ -22,3 +22,15 @@
          tbTest.Text = e.NewValue.ToString(); 
       }  
 ```
+
+```csharp
+<Window x:Class = "WpfApplication3.MainWindow" 
+   	xmlns = "http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+	xmlns:x = "http://schemas.microsoft.com/winfx/2006/xaml" 
+   	xmlns:views = "clr-namespace:WpfApplication3"
+   	Title = "MainWindow" Height = "350" Width = "604"> 
+   <Grid> 
+      <views:UserControl1 SetText = "Hellow World"/> 
+   </Grid> 
+</Window> 
+```

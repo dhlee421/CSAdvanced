@@ -3,6 +3,10 @@
 
 - Dependency properties는 DependencyObject class로 부터 상속받은 Dictionary에 key/value 쌍으로 저장된다.
 
+- Windows Presentation Foundation (WPF) provides a set of services that can be used to extend the functionality of a type's property. Collectively, these services are referred to as the __WPF property system__. A property that's __backed__ by the __WPF property system__ is known as a __dependency property__. This overview describes the WPF property system and the capabilities of a dependency property, including how to use existing dependency properties in XAML and in code. This overview also introduces specialized aspects of dependency properties, such as dependency property metadata, and how to create your own dependency property in a custom class.
+
+
+
 ```csharp
       public static readonly DependencyProperty SetTextProperty = 
          DependencyProperty.Register("SetText", typeof(string), typeof(UserControl1), new 

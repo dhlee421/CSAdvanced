@@ -161,5 +161,59 @@ ExternalException	SystemException	Base class for exceptions that occur or are ta
 
 SEHException	ExternalException	Exception encapsulating Win32 structured exception handling information.
 ```
+```csharp
+using System; 
+using System.IO; 
+using System.Windows;
 
+namespace WPFExceptionHandling { 
 
+   public partial class MainWindow : Window { 
+	
+      public MainWindow() { 
+         InitializeComponent(); 
+         ReadFile(0); 
+      }
+		
+      void ReadFile(int index) { 
+         string path = @"D:\Test.txt"; 
+         StreamReader file = new StreamReader(path); 
+         char[] buffer = new char[80]; 
+			
+         try { 
+            file.ReadBlock(buffer, index, buffer.Length); 
+            string str = new string(buffer); 
+            str.Trim(); 
+            textBox.Text = str; 
+         }
+         catch (Exception e) {
+            MessageBox.Show("Error reading from "+ path + "\nMessage = "+ e.Message);
+         } 
+         finally { 
+            if (file != null) { 
+               file.Close(); 
+            } 
+         } 
+      } 
+   } 
+}
+```
+
+```xaml
+<Window x:Class = "WPFExceptionHandling.MainWindow" 
+   xmlns = "http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+   xmlns:x = "http://schemas.microsoft.com/winfx/2006/xaml"
+   xmlns:d = "http://schemas.microsoft.com/expression/blend/2008"
+   xmlns:mc = "http://schemas.openxmlformats.org/markup-compatibility/2006" 
+   xmlns:local = "clr-namespace:WPFExceptionHandling"
+   mc:Ignorable = "d" 
+   Title = "MainWindow" Height = "350" Width = "604">
+	
+   <Grid> 
+      <TextBox x:Name = "textBox" HorizontalAlignment = "Left"
+         Height = "241" Margin = "70,39,0,0" TextWrapping = "Wrap" 
+         VerticalAlignment = "Top" Width = "453"/> 
+   </Grid> 
+	
+</Window>
+```

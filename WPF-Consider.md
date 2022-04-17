@@ -40,7 +40,7 @@
 </Window> 
 ```
 
-### WPF Exception Handling
+### WPF Global Exception Handling
 
 - WPF How to catch global 
 

@@ -140,16 +140,16 @@ SEHException
 |Exception type	| Base type | Description |
 | --- | --- | --- |
 |Exception | Object | Base class for all exceptions. |
-|SystemException	Exception	Base class for all runtime-generated errors.
-|IndexOutOfRangeException	SystemException	Thrown by the runtime only when an array is indexed improperly.
-|NullReferenceException	SystemException	Thrown by the runtime only when a null object is referenced.
-|AccessViolationException	SystemException	Thrown by the runtime only when invalid memory is accessed.
-|InvalidOperationException	SystemException	Thrown by methods when in an invalid state.
-|ArgumentException	SystemException	Base class for all argument exceptions.
-|ArgumentNullException	ArgumentException	Thrown by methods that do not allow an argument to be null.
-|ArgumentOutOfRangeException	ArgumentException	Thrown by methods that verify that arguments are in a given range.
-|ExternalException	SystemException	Base class for exceptions that occur or are targeted at environments outside the runtime.
-|SEHException	ExternalException	Exception encapsulating Win32 structured exception handling information.
+|SystemException | Exception | Base class for all runtime-generated errors. |
+|IndexOutOfRangeException | SystemException | Thrown by the runtime only when an array is indexed improperly. |
+|NullReferenceException	| SystemException | Thrown by the runtime only when a null object is referenced. |
+|AccessViolationException | SystemException | Thrown by the runtime only when invalid memory is accessed. |
+|InvalidOperationException | SystemException | Thrown by methods when in an invalid state. |
+|ArgumentException | SystemException | Base class for all argument exceptions. |
+|ArgumentNullException | ArgumentException | Thrown by methods that do not allow an argument to be null. |
+|ArgumentOutOfRangeException | ArgumentException | Thrown by methods that verify that arguments are in a given range. |
+|ExternalException | SystemException | Base class for exceptions that occur or are targeted at environments outside the runtime. |
+|SEHException | ExternalException | Exception encapsulating Win32 structured exception handling information. |
 
 
 ```csharp

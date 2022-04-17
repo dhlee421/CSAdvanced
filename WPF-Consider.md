@@ -113,33 +113,9 @@ public sealed partial class App
 
 ```
 
-Exception
-
-SystemException
-
-IndexOutOfRangeException
-
-NullReferenceException
-
-AccessViolationException
-
-InvalidOperationException
-
-ArgumentException
-
-ArgumentNullException
-
-ArgumentOutOfRangeException
-
-ExternalException
-
-SEHException
-
-
-
 |Exception type	| Base type | Description |
 | --- | --- | --- |
-|Exception | Object | Base class for all exceptions. |
+|Exception | Object | Base class for all `exceptions`. |
 |SystemException | Exception | Base class for all runtime-generated errors. |
 |IndexOutOfRangeException | SystemException | Thrown by the runtime only when an array is indexed improperly. |
 |NullReferenceException	| SystemException | Thrown by the runtime only when a null object is referenced. |

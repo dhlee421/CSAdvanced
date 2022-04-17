@@ -8,24 +8,24 @@
 
 
 ```csharp
-      public static readonly DependencyProperty SetTextProperty = 
+    public static readonly DependencyProperty SetTextProperty = 
          DependencyProperty.Register("SetText", typeof(string), typeof(UserControl1), new 
             PropertyMetadata("", new PropertyChangedCallback(OnSetTextChanged))); 
 				
-      public string SetText { 
-         get { return (string)GetValue(SetTextProperty); } 
-         set { SetValue(SetTextProperty, value); } 
-      } 
+    public string SetText { 
+        get { return (string)GetValue(SetTextProperty); } 
+        set { SetValue(SetTextProperty, value); } 
+    } 
 		
-      private static void OnSetTextChanged(DependencyObject d,
-         DependencyPropertyChangedEventArgs e) { 
-         UserControl1 UserControl1Control = d as UserControl1; 
-         UserControl1Control.OnSetTextChanged(e); 
-      } 
+    private static void OnSetTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) 
+    { 
+        UserControl1 UserControl1Control = d as UserControl1; 
+        UserControl1Control.OnSetTextChanged(e); 
+    } 
 		
-      private void OnSetTextChanged(DependencyPropertyChangedEventArgs e) { 
-         tbTest.Text = e.NewValue.ToString(); 
-      }  
+    private void OnSetTextChanged(DependencyPropertyChangedEventArgs e) { 
+        tbTest.Text = e.NewValue.ToString(); 
+    }  
 ```
 
 ```csharp

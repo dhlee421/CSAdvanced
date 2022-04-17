@@ -45,50 +45,70 @@
 - WPF How to catch global 
 
 ```csharp
-public partial class App : Application
+public sealed partial class App
 {
-    private static Logger _logger = LogManager.GetCurrentClassLogger();
-
     protected override void OnStartup(StartupEventArgs e)
     {
-        base.OnStartup(e);
+        // setting up the Dependency Injection container
+        var resolver = ResolverFactory.Get();
 
-        SetupExceptionHandling();
+        // getting the ILogger or ILog interface
+        var logger = resolver.Resolve<ILogger>();
+        RegisterGlobalExceptionHandling(logger);
+
+        // Bootstrapping Dependency Injection 
+        // injects ViewModel into MainWindow.xaml
+        // remember to remove the StartupUri attribute in App.xaml
+        var mainWindow = resolver.Resolve<Pages.MainWindow>();
+        mainWindow.Show();
     }
 
-    private void SetupExceptionHandling()
+    private void RegisterGlobalExceptionHandling(ILogger log)
     {
-        AppDomain.CurrentDomain.UnhandledException += (s, e) =>
-            LogUnhandledException((Exception)e.ExceptionObject, "AppDomain.CurrentDomain.UnhandledException");
+        // this is the line you really want 
+        AppDomain.CurrentDomain.UnhandledException += 
+            (sender, args) => CurrentDomainOnUnhandledException(args, log);
 
-        DispatcherUnhandledException += (s, e) =>
-        {
-            LogUnhandledException(e.Exception, "Application.Current.DispatcherUnhandledException");
-            e.Handled = true;
-        };
+        // optional: hooking up some more handlers
+        // remember that you need to hook up additional handlers when 
+        // logging from other dispatchers, shedulers, or applications
 
-        TaskScheduler.UnobservedTaskException += (s, e) =>
-        {
-            LogUnhandledException(e.Exception, "TaskScheduler.UnobservedTaskException");
-            e.SetObserved();
-        };
+        Application.Dispatcher.UnhandledException += 
+            (sender, args) => DispatcherOnUnhandledException(args, log);
+
+        Application.Current.DispatcherUnhandledException +=
+            (sender, args) => CurrentOnDispatcherUnhandledException(args, log);
+
+        TaskScheduler.UnobservedTaskException += 
+            (sender, args) => TaskSchedulerOnUnobservedTaskException(args, log);
     }
 
-    private void LogUnhandledException(Exception exception, string source)
+    private static void TaskSchedulerOnUnobservedTaskException(UnobservedTaskExceptionEventArgs args, ILogger log)
     {
-        string message = $"Unhandled exception ({source})";
-        try
-        {
-            System.Reflection.AssemblyName assemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName();
-            message = string.Format("Unhandled exception in {0} v{1}", assemblyName.Name, assemblyName.Version);
-        }
-        catch (Exception ex)
-        {
-            _logger.Error(ex, "Exception in LogUnhandledException");
-        }
-        finally
-        {
-            _logger.Error(exception, message);
-        }
+        log.Error(args.Exception, args.Exception.Message);
+        args.SetObserved();
     }
+
+    private static void CurrentOnDispatcherUnhandledException(DispatcherUnhandledExceptionEventArgs args, ILogger log)
+    {
+        log.Error(args.Exception, args.Exception.Message);
+        // args.Handled = true;
+    }
+
+    private static void DispatcherOnUnhandledException(DispatcherUnhandledExceptionEventArgs args, ILogger log)
+    {
+        log.Error(args.Exception, args.Exception.Message);
+        // args.Handled = true;
+    }
+
+    private static void CurrentDomainOnUnhandledException(UnhandledExceptionEventArgs args, ILogger log)
+    {
+        var exception = args.ExceptionObject as Exception;
+        var terminatingMessage = args.IsTerminating ? " The application is terminating." : string.Empty;
+        var exceptionMessage = exception?.Message ?? "An unmanaged exception occured.";
+        var message = string.Concat(exceptionMessage, terminatingMessage);
+        log.Error(exception, message);
+    }
+}
+
 ```

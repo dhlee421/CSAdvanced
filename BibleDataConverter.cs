@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data.SQLite;
 using System.Windows.Forms;
 
@@ -151,8 +151,8 @@ namespace bibleDataConverter
             sqlcmd = conn.CreateCommand();
             sqlcmd.CommandText = "SELECT * FROM Bible";
 
-            SQLiteCommand sqlwrcmd;
-            sqlwrcmd = sqlOutConn.CreateCommand();
+            SQLiteCommand sqlWriteCommand;
+            sqlWriteCommand = sqlOutConn.CreateCommand();
 
             sqlDataReader = sqlcmd.ExecuteReader();
             while (sqlDataReader.Read())
@@ -164,8 +164,8 @@ namespace bibleDataConverter
 
 
                 string cmdfm = String.Format("INSERT INTO bible (book, chapter, verse, content) VALUES({0}, {1}, {2}, \'{3}\'); ", sqlDataReader["book"], sqlDataReader["chapter"], sqlDataReader["verse"], content);
-                sqlwrcmd.CommandText = cmdfm;
-                sqlwrcmd.ExecuteNonQuery();
+                sqlWriteCommand.CommandText = cmdfm;
+                sqlWriteCommand.ExecuteNonQuery();
 
                 resultList.Items.Add(myreader);
             }
@@ -178,35 +178,35 @@ namespace bibleDataConverter
             sqlcmd = conn.CreateCommand();
             sqlcmd.CommandText = "SELECT * FROM Bible";
 
-            //SQLiteCommand sqlwrcmd;
-            //sqlwrcmd = sqlOutConn.CreateCommand();
+            //SQLiteCommand sqlWriteCommand;
+            //sqlWriteCommand = sqlOutConn.CreateCommand();
 
             using (var transaction = sqlOutConn.BeginTransaction())
             {
-                var command = sqlOutConn.CreateCommand();
+                var sqlWriteCommand = sqlOutConn.CreateCommand();
 
-                command.CommandText = @"INSERT INTO bible ( book, chapter, verse, content) VALUES(@book, @chapter, @verse, @content)";
+                sqlWriteCommand.CommandText = @"INSERT INTO bible ( book, chapter, verse, content) VALUES(@book, @chapter, @verse, @content)";
 
-                var bookParam = command.CreateParameter();
+                var bookParam = sqlWriteCommand.CreateParameter();
                 bookParam.ParameterName = "@book";
-                command.Parameters.Add(bookParam);
+                sqlWriteCommand.Parameters.Add(bookParam);
 
-                var chapParam = command.CreateParameter();
+                var chapParam = sqlWriteCommand.CreateParameter();
                 chapParam.ParameterName = "@chapter";
-                command.Parameters.Add(chapParam);
+                sqlWriteCommand.Parameters.Add(chapParam);
 
-                var verseParam = command.CreateParameter();
+                var verseParam = sqlWriteCommand.CreateParameter();
                 verseParam.ParameterName = "@verse";
-                command.Parameters.Add(verseParam);
+                sqlWriteCommand.Parameters.Add(verseParam);
 
-                var contentParam = command.CreateParameter();
+                var contentParam = sqlWriteCommand.CreateParameter();
                 contentParam.ParameterName = "@content";
-                command.Parameters.Add(contentParam);
+                sqlWriteCommand.Parameters.Add(contentParam);
 
                 sqlDataReader = sqlcmd.ExecuteReader();
                 while (sqlDataReader.Read())
                 {
-                    string myreader = sqlDataReader["book"] + "," + sqlDataReader["chapter"] + "," + sqlDataReader["verse"] + "," + sqlDataReader["btext"];
+                    //string myreader = sqlDataReader["book"] + "," + sqlDataReader["chapter"] + "," + sqlDataReader["verse"] + "," + sqlDataReader["btext"];
 
                     String data1 = sqlDataReader["btext"].ToString();
                     string content = data1.Replace("'", "''");
@@ -216,14 +216,13 @@ namespace bibleDataConverter
                     verseParam.Value = sqlDataReader["verse"];
                     contentParam.Value = content;
 
-                    command.ExecuteNonQuery();
+                    sqlWriteCommand.ExecuteNonQuery();
 
-                    resultList.Items.Add(myreader);
+                    //resultList.Items.Add(myreader);
                 }
 
                 transaction.Commit();
             }
         }
-
     }
 }
